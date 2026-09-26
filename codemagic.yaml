@@ -5,13 +5,18 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       java: 17
+      android_sdk: 34
     scripts:
-      - name: Set Android SDK location
+      - name: Setup Gradle Wrapper and Build APK
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-      - name: Build Android APK
-        script: |
-          chmod +x gradlew || true
-          ./gradlew assembleDebug || gradle assembleDebug
+          
+          # Generate Gradle Wrapper if missing
+          if [ ! -f gradlew ]; then
+            gradle wrapper --gradle-version 8.4
+          fi
+          
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
     artifacts:
-      - app/build/outputs/apk/**/*.apk
+      - app/build/outputs/apk/debug/*.apk
