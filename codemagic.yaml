@@ -10,9 +10,8 @@ workflows:
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           
-          if [ ! -f gradlew ]; then
-            gradle wrapper --gradle-version 8.4
-          fi
+          # Generate Gradle Wrapper with version 8.9
+          gradle wrapper --gradle-version 8.9
           
           chmod +x gradlew
           ./gradlew assembleDebug --stacktrace
